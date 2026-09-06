@@ -586,8 +586,28 @@ namespace TaiPlugins
                 (player.armor[12] == null || player.armor[12].IsAir)))
             {
                 applyingSocialArmorSet = true;
-                try { player.UpdateArmorSets(10); }
-                finally { applyingSocialArmorSet = false; }
+                try
+                {
+                    // In 1.4.5.8 UpdateArmorSets(int) no longer uses its argument: ArmorSetBonuses.QueryContext
+                    // always reads armor[0..2]. Temporarily expose the social armor there while vanilla checks it.
+                    for (var i = 0; i < 3; i++)
+                    {
+                        var equipped = player.armor[i];
+                        player.armor[i] = player.armor[i + 10];
+                        player.armor[i + 10] = equipped;
+                    }
+                    player.UpdateArmorSets(0);
+                }
+                finally
+                {
+                    for (var i = 0; i < 3; i++)
+                    {
+                        var social = player.armor[i];
+                        player.armor[i] = player.armor[i + 10];
+                        player.armor[i + 10] = social;
+                    }
+                    applyingSocialArmorSet = false;
+                }
             }
 
             if (!ExtraAccessoriesEnabled.Value) return;
