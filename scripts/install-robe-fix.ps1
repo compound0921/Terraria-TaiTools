@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$TerrariaPath)
+﻿param([Parameter(Mandatory=$true)][string]$TerrariaPath)
 $ErrorActionPreference = 'Stop'
 if (Get-Process Terraria -ErrorAction SilentlyContinue) { throw '请自行正常退出 Terraria 后再安装。本脚本不会关闭游戏。' }
 $staging = Join-Path (Split-Path -Parent $PSScriptRoot) 'build\robe-fix'

@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$TerrariaPath = 'G:\SteamLibrary\steamapps\common\Terraria'
 )
 
